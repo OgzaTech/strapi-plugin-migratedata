@@ -1,0 +1,29 @@
+{
+  "name": "strapi-plugin-migrate-data",
+  "version": "0.0.0",
+  "description": "This is the description of the plugin.",
+  "strapi": {
+    "name": "Migrate-Data",
+    "description": "Description of Join Table plugin",
+    "kind": "plugin",
+    "displayName": "Join Table"
+  },
+  "dependencies": {
+    "axios": "^0.27.2",
+    "cli-progress": "^3.11.2",
+    "jwt-decode": "^3.1.2"
+  },
+  "author": {
+    "name": "A Strapi developer"
+  },
+  "maintainers": [
+    {
+      "name": "A Strapi developer"
+    }
+  ],
+  "engines": {
+    "node": ">=14.19.1 <=16.x.x",
+    "npm": ">=6.0.0"
+  },
+  "license": "MIT"
+}
