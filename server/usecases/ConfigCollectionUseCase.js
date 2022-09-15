@@ -2,18 +2,17 @@ const fs = require('fs');
 const stringFormatter = require('../utils/StringFormatter');
 const axios = require('axios');
 
-module.exports = class SavePostDataUseCase {
+module.exports = class ConfigCollectionUseCase {
     async savePostData(choices, baseUrl, jsonPath) {
         let newContentList = [];
         let jsonContent;
-        //fs.writeFileSync
         try {
             jsonContent = fs.readFileSync(jsonPath, 'utf-8');
             jsonContent = JSON.parse(jsonContent);
         } catch (err) {
         }
         for (let choice of choices) {
-            if(!choice.columns || choice.columns.length  == 0 || !choice.exportTableName){
+            if (!choice.columns || choice.columns.length == 0 || !choice.exportTableName) {
                 continue
             }
             let content = {};
@@ -23,11 +22,11 @@ module.exports = class SavePostDataUseCase {
             let path = await stringFormatter.makePlural(choice.exportTableName);
 
             count = await axios.get(baseUrl + path + '/count').catch((err) => {
-                return {data:0};
+                return { data: 0 };
             });
 
-            for(let column of choice.columns){
-                if(!column.exportColumnName){
+            for (let column of choice.columns) {
+                if (!column.exportColumnName) {
                     continue
                 }
                 let columnObject = {};
@@ -36,7 +35,7 @@ module.exports = class SavePostDataUseCase {
                 columnObject.isRelation = column.type == 'relation' ? true : false;
                 mappings.push(columnObject);
             }
-            
+
 
             content.targetTableName = choice.importTableName;
             content.itemCount = count.data;
@@ -50,7 +49,23 @@ module.exports = class SavePostDataUseCase {
 
             newContentList.push(content)
         }
-        fs.writeFileSync(jsonPath,JSON.stringify(newContentList),'utf-8')
+        fs.writeFileSync(jsonPath, JSON.stringify(newContentList), 'utf-8')
+    }
+    async deleteSelectedCollections(jsonPath, index) {
+        let jsonContent = fs.readFileSync(jsonPath, 'utf-8');
+        let newJsonContent = [];
+        jsonContent = JSON.parse(jsonContent);
+        jsonContent.map((dt, i) => {
+            if (i == index) { }
+            else { newJsonContent.push(dt) }
+        })
+        fs.writeFileSync(jsonPath, JSON.stringify(newJsonContent), 'utf-8');
+        return jsonContent;
+    }
+    async getConfigCollections(jsonPath) {
+        let jsonContent = fs.readFileSync(jsonPath, 'utf-8');
+        jsonContent = JSON.parse(jsonContent);
+        return jsonContent
     }
 
 }

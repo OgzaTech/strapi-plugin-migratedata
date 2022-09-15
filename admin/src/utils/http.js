@@ -1,19 +1,19 @@
 import { request } from '@strapi/helper-plugin';
 
 const http = {
-    getExport: async (url) => {
-        return await request("/strapi-plugin-migrate-data/getExportData", {
+    getExportSchema: async (url) => {
+        return await request("/strapi-plugin-migrate-data/getExportSchema", {
             method: "POST",
             body: { url: url }
         });
     },
-    getImport: async () => {
-        return await request("/strapi-plugin-migrate-data/getImportData", {
+    getImportSchema: async () => {
+        return await request("/strapi-plugin-migrate-data/getImportSchema", {
             method: "GET",
         });
     },
-    postData: async (baseUrl, choices) => {
-        return await request('/strapi-plugin-migrate-data/postData', {
+    addConfigCollection: async (baseUrl, choices) => {
+        return await request('/strapi-plugin-migrate-data/addConfigCollection', {
             method: 'POST',
             body: {
                 baseUrl: baseUrl,
@@ -21,13 +21,13 @@ const http = {
             }
         });
     },
-    getConfigContent: async () => {
-        return await request('/strapi-plugin-migrate-data/getConfigContent', {
+    getConfigCollection: async () => {
+        return await request('/strapi-plugin-migrate-data/getConfigCollection', {
             method: 'GET',
         });
     },
-    deleteChoice: async (index) => {
-        return await request('/strapi-plugin-migrate-data/deleteChoice', {
+    deleteSelectedCollections: async (index) => {
+        return await request('/strapi-plugin-migrate-data/deleteSelectedCollections', {
             method: 'Post',
             body: {
                 index: index,

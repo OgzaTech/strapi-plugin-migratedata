@@ -8,7 +8,7 @@ import { Combobox, ComboboxOption } from '@strapi/design-system/Combobox';
 import { GridLayout } from '@strapi/design-system/Layout';
 import style from '../../style/style';
 
-const ColumnItem = (props) => {
+const SettingsTableColumnItem = (props) => {
     const [colonItemCombobox, setColonItemCombobox] = useState();
     const [selectType, setSelectType] = useState();
 
@@ -25,11 +25,11 @@ const ColumnItem = (props) => {
     return (
 
         <GridLayout>
-            <Box padding={style.defaultBoxPadding} hasRadius={true} background={style.defaultBoxBackground}>
+            <Box padding={style.mediumPadding} hasRadius={true} background={style.mainBackground}>
                 <FieldInput placeholder="Placeholder" value={props.columnName} disabled={true}/>
             </Box>
 
-            <Box padding={style.defaultBoxPadding} hasRadius={true} background={style.defaultBoxBackground}>
+            <Box padding={style.mediumPadding} hasRadius={true} background={style.mainBackground}>
                 <Combobox aria-label="Colon" value={colonItemCombobox} onChange={handleChangeCombo}>
 
                     {                            
@@ -49,4 +49,4 @@ const ColumnItem = (props) => {
 }
 
 
-export default ColumnItem;
+export default SettingsTableColumnItem;

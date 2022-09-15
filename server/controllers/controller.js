@@ -1,12 +1,12 @@
 'use strict';
 const axios = require('axios');
-const JoinTableUseCase = require('../usecases/JoinTableUseCase');
-const SavePostDataUseCase = require('../usecases/SavePostDataUseCase');
-const importData = require('../../../../extensions/documentation/documentation/1.0.0/full_documentation.json');
 const jwtDecode = require('jwt-decode');
-const stringFormatter = require('../utils/StringFormatter')
 const path = require('path');
 const fs = require('fs');
+const SchemaUseCase = require('../usecases/SchemaUseCase');
+const ConfigCollectionUseCase = require('../usecases/ConfigCollectionUseCase');
+const importData = require('../../../../src/extensions/documentation/documentation/1.0.0/full_documentation.json');
+const stringFormatter = require('../utils/StringFormatter')
 
 module.exports = ({ strapi }) => ({
   index(ctx) {
@@ -15,50 +15,47 @@ module.exports = ({ strapi }) => ({
       .service('myService')
       .getWelcomeMessage();
   },
-  async getExportData(ctx) {
+  async getExportSchema(ctx) {
     let resp = await axios.get(ctx.request.body.url).catch((err) => {
       return err
     });
-    const joinTableUseCase = new JoinTableUseCase()
-    const data = joinTableUseCase.getExportSchema(resp);
+    const schemaUseCase = new SchemaUseCase()
+    const data = schemaUseCase.getExportSchema(resp);
     return data
   },
-  async getImportData(ctx) {
+  async getImportSchema(ctx) {
     let data = importData.components.schemas;
-    const joinTableUseCase = new JoinTableUseCase()
-    return joinTableUseCase.getImportSchema(data);
+    const schemaUseCase = new SchemaUseCase()
+    return schemaUseCase.getImportSchema(data);
   },
-  async postData(ctx) {
+  async addConfigCollection(ctx) {
     let { baseUrl, choices } = ctx.request.body;
     baseUrl = baseUrl.slice(0, baseUrl.indexOf('documentation'))
-    const jsonPath = path.join(path.normalize(__dirname + '/../..'), 'ConfigContent.json');
+    const jsonPath = path.join(path.normalize(__dirname + '/../..'), 'ConfigCollection.json');
 
-    const savePostDataUseCase = new SavePostDataUseCase()
-    let data = await savePostDataUseCase.savePostData(choices, baseUrl, jsonPath);
+    const configCollectionUseCase = new ConfigCollectionUseCase()
+    let data = await configCollectionUseCase.savePostData(choices, baseUrl, jsonPath);
 
     return { "isSuccess": true }
   },
-  async getConfigContent(ctx) {
-    const jsonPath = path.join(path.normalize(__dirname + '/../..'), 'ConfigContent.json');
-    let jsonContent = fs.readFileSync(jsonPath, 'utf-8');
-    jsonContent = JSON.parse(jsonContent);
+  async getConfigCollection(ctx) {
+    const jsonPath = path.join(path.normalize(__dirname + '/../..'), 'ConfigCollection.json');
+
+    const configCollectionUseCase = new ConfigCollectionUseCase()
+    let jsonContent = await configCollectionUseCase.getConfigCollections(jsonPath);
     return jsonContent;
   },
-  async deleteChoice(ctx) {
+  async deleteSelectedCollections(ctx) {
     const { index } = ctx.request.body;
-    const jsonPath = path.join(path.normalize(__dirname + '/../..'), 'ConfigContent.json');
-    let jsonContent = fs.readFileSync(jsonPath, 'utf-8');
-    let newJsonContent = [];
-    jsonContent = JSON.parse(jsonContent);
-    jsonContent.map((dt, i) => {
-      if (i == index) { }
-      else { newJsonContent.push(dt) }
-    })
-    fs.writeFileSync(jsonPath, JSON.stringify(newJsonContent), 'utf-8')
-    return true;
+    const jsonPath = path.join(path.normalize(__dirname + '/../..'), 'ConfigCollection.json');
+
+    const configCollectionUseCase = new ConfigCollectionUseCase()
+    let data = await configCollectionUseCase.deleteSelectedCollections(jsonPath, index);
+
+    return data;
   },
   async dataTransfer(ctx) {
-    const jsonPath = path.join(path.normalize(__dirname + '/../..'), 'ConfigContent.json');
+    const jsonPath = path.join(path.normalize(__dirname + '/../..'), 'ConfigCollection.json');
     let jsonContent = fs.readFileSync(jsonPath, 'utf-8');
     jsonContent = JSON.parse(jsonContent);
 
@@ -95,7 +92,6 @@ module.exports = ({ strapi }) => ({
         };
         data.mappings.map((column) => {
           if (column.isRelation) {
-            //do nothing
           } else {
             query[column.targetField] = dt[column.sourceField]
           }
@@ -108,9 +104,9 @@ module.exports = ({ strapi }) => ({
       }).catch((err) => {
         return err
       });
-      if(insertCount.count == null){
+      if (insertCount.count == null) {
         data.transferedDataCount += 0;
-      }else{
+      } else {
         data.transferedDataCount += insertCount.count;
       }
 
@@ -126,7 +122,7 @@ module.exports = ({ strapi }) => ({
     return true;
   },
   async relationTransfer(ctx) {
-    const jsonPath = path.join(path.normalize(__dirname + '/../..'), 'ConfigContent.json');
+    const jsonPath = path.join(path.normalize(__dirname + '/../..'), 'ConfigCollection.json');
     let jsonContent = fs.readFileSync(jsonPath, 'utf-8');
     jsonContent = JSON.parse(jsonContent);
 
@@ -138,8 +134,6 @@ module.exports = ({ strapi }) => ({
       let exportData = await axios.get(data.sourceUrl + '?_start=' + start + '&_limit=10').catch((err) => {
         return err
       });
-
-
 
       if (exportData.data.length == 0) {
         break

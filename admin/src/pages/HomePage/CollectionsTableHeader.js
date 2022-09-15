@@ -6,13 +6,13 @@ import { IconButton, IconButtonGroup } from '@strapi/design-system/IconButton';
 import Refresh from '@strapi/icons/Refresh';
 
 
-const TableHeader = (props) => {
+const CollectionsTableHeader = (props) => {
 
   return (
     <Thead>
       <Tr>
         <Th>
-              <IconButton style={{marginLeft:"-8px"}} noBorder={true} onClick={()=>{props.setGetConfigContentControl(true)}} label="Refresh" icon={<Refresh />} />
+              <IconButton style={{marginLeft:"-8px"}} noBorder={true} onClick={()=>{props.setGetConfigCollectionControl(true)}} label="Refresh" icon={<Refresh />} />
         </Th>
         <Th>
           <Typography  variant="sigma">Target Table</Typography>
@@ -46,4 +46,4 @@ const TableHeader = (props) => {
 }
 
 
-export default TableHeader;
+export default CollectionsTableHeader;

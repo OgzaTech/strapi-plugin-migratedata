@@ -16,12 +16,11 @@ import { Button } from '@strapi/design-system/Button';
 import { TextInput } from '@strapi/design-system/TextInput';
 import { Box } from '@strapi/design-system/Box';
 import style from '../../style/style';
-import TableItem from './TableItem';
+import SettingsTableItem from './SettingsTableItem';
 import Header from './Header';
 import http from '../../utils/http';
-import TableColumn from './TableColumn';
-import TableHeader from './TableHeader';
-import ConfigContent from '../../../../ConfigContent.json';
+import CollectionsTableColumn from './CollectionsTableColumn';
+import CollectionsTableHeader from './CollectionsTableHeader';
 
 let dataArray = [];
 let exportSchema = {};
@@ -30,22 +29,22 @@ let importSchema = {};
 const HomePage = () => {
   const [message, setMessage] = useState('');
   const [okButtonState, setOkButtonState] = useState(false);
-  const [ConfigContent, setConfigContent] = useState([]);
-  const [getConfigContentControl, setGetConfigContentControl] = useState(true)
+  const [ConfigCollection, setConfigCollection] = useState([]);
+  const [getConfigCollectionControl, setGetConfigCollectionControl] = useState(true)
  
-  if(getConfigContentControl){
-    http.getConfigContent().then((data) => {
-      setConfigContent(data)
+  if(getConfigCollectionControl){
+    http.getConfigCollection().then((data) => {
+      setConfigCollection(data)
     })
-    setGetConfigContentControl(false)
+    setGetConfigCollectionControl(false)
   }
    
 
 
   const handleClick = async (event) => {
     if(message){
-      exportSchema = await http.getExport(message);
-      importSchema = await http.getImport();
+      exportSchema = await http.getExportSchema(message);
+      importSchema = await http.getImportSchema();
       setOkButtonState(true);
     } 
   };
@@ -56,7 +55,7 @@ const HomePage = () => {
   };
 
   const handleClickDataTransfer = async (as) => {
-    await http.postData(message, dataArray);
+    await http.addConfigCollection(message, dataArray);
     window.location.reload()
   }
 
@@ -80,18 +79,18 @@ const HomePage = () => {
           </Tabs>
           <TabPanels>
             <TabPanel>
-              <Box color="neutral800" padding={4} background="neutral0">
+              <Box color="neutral800" padding={4} background={style.mainBackground}>
 
-                <TableHeader 
-                setGetConfigContentControl ={setGetConfigContentControl}
+                <CollectionsTableHeader 
+                setGetConfigCollectionControl ={setGetConfigCollectionControl}
                 />
                 {
-                  ConfigContent.map((data, index) => (
-                    <TableColumn
+                  ConfigCollection.map((data, index) => (
+                    <CollectionsTableColumn
                       key={index}
                       id={index}
                       data={data}
-                      setGetConfigContentControl={setGetConfigContentControl}
+                      setGetConfigCollectionControl={setGetConfigCollectionControl}
                     />
                   ))
                 }
@@ -102,16 +101,16 @@ const HomePage = () => {
               <Box color="neutral800" padding={1} style={{ paddingTop: "50px" }} background="neutral0">
 
                 <ContentLayout>
-                  <Box padding={style.defaultBoxPadding} style={style.inputSwaggerUrl} background={style.defaultBoxBackground} shadow={style.defaultBoxShadow} hasRadius={true}>
+                  <Box padding={style.mediumPadding} background={style.mainBackground} shadow={style.mainShadow} hasRadius={true}>
 
-                    <TextInput label="Your Swagger Url" placeholder="Swagger url" name="content" onChange={handleChange} value={message} />
+                    <TextInput label="V3 Swagger Url" placeholder="Swagger url" name="content" onChange={handleChange} value={message} />
 
                   </Box>
 
-                  <Button onClick={handleClick} style={style.getModelButton}>Get Entity Model</Button>
+                  <Button onClick={handleClick} style={style.primaryButton}>Get Entity Model</Button>
                   {
                     Object.keys(importSchema).map((data, index) => (
-                      <TableItem
+                      <SettingsTableItem
                         key={index}
                         id={index}
                         tableName={data}
@@ -122,7 +121,7 @@ const HomePage = () => {
                     ))
                   }
                   {okButtonState == true ?
-                    <Button onClick={handleClickDataTransfer} style={style.getModelButton} >Add Choices</Button> :
+                    <Button onClick={handleClickDataTransfer} style={style.primaryButton} >Add Choices</Button> :
                     <Box padding={8}><Divider /></Box>}
 
                 </ContentLayout>

@@ -11,8 +11,6 @@ const makePlural = (data) => {
 }
 const makeStrapiModel = async (model) => {
     let modelArray = [];
-    //'plugin::users-permissions.role'
-    //'plugin::users-permissions.user'
     model = await model.match(/[A-Z][a-z]+/g);
     model.map((data) => {
         modelArray.push(data.toLowerCase());

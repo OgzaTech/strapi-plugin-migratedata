@@ -1,22 +1,11 @@
 module.exports = {
-    defaultBoxPadding: 4,
-    defaultBoxBackground: "neutral0",
-    defaultBoxShadow: "filterShadow",
-    tableComboPadding: 5,
-    getModelButton: {
-        marginTop: "15px",
-        height: "43px",
+    smallPadding: 2,
+    mediumPadding: 4,
+    mainBackground: "neutral0",
+    mainShadow: "filterShadow",
+    primaryButton: {
+        marginTop: "20px",
+        height: "45px",
         marginBottom: "20px"
-    },
-    inputSwaggerUrl: {
-        height: "100px",
-
-    },
-    boxCheckBox: {
-        height: "50px",
-        width: "120px",
-        marginLeft: "80%",
-        marginTop: "25px"
     }
-
 }

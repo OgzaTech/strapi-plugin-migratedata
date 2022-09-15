@@ -9,8 +9,8 @@ module.exports = [
   },
   {
     method: 'POST',
-    path: '/getExportData',
-    handler: 'Controller.getExportData',
+    path: '/getExportSchema',
+    handler: 'Controller.getExportSchema',
     config: {
       policies: [],
       auth: false,
@@ -18,8 +18,8 @@ module.exports = [
   },
   {
     method: 'GET',
-    path: '/getImportData',
-    handler: 'Controller.getImportData',
+    path: '/getImportSchema',
+    handler: 'Controller.getImportSchema',
     config: {
       policies: [],
       auth: false,
@@ -27,8 +27,8 @@ module.exports = [
   },
   {
     method: 'POST',
-    path: '/postData',
-    handler: 'Controller.postData',
+    path: '/addConfigCollection',
+    handler: 'Controller.addConfigCollection',
     config: {
       policies: [],
       auth: false,
@@ -36,8 +36,8 @@ module.exports = [
   },
   {
     method: 'GET',
-    path: '/getConfigContent',
-    handler: 'Controller.getConfigContent',
+    path: '/getConfigCollection',
+    handler: 'Controller.getConfigCollection',
     config: {
       policies: [],
       auth: false,
@@ -45,8 +45,8 @@ module.exports = [
   },
   {
     method: 'POST',
-    path: '/deleteChoice',
-    handler: 'Controller.deleteChoice',
+    path: '/deleteSelectedCollections',
+    handler: 'Controller.deleteSelectedCollections',
     config: {
       policies: [],
       auth: false,
