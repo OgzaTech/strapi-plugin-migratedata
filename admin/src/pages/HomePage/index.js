@@ -54,7 +54,7 @@ const HomePage = () => {
 
   };
 
-  const handleClickDataTransfer = async (as) => {
+  const saveSelected = async (as) => {
     await http.addConfigCollection(message, dataArray);
     window.location.reload()
   }
@@ -121,7 +121,7 @@ const HomePage = () => {
                     ))
                   }
                   {okButtonState == true ?
-                    <Button onClick={handleClickDataTransfer} style={style.primaryButton} >Add Choices</Button> :
+                    <Button onClick={saveSelected} style={style.primaryButton} >Save Selected</Button> :
                     <Box padding={8}><Divider /></Box>}
 
                 </ContentLayout>

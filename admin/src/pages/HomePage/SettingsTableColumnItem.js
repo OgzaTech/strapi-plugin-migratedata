@@ -13,7 +13,9 @@ const SettingsTableColumnItem = (props) => {
     const [selectType, setSelectType] = useState();
 
     const handleChangeCombo = async (e) => {
-        setSelectType(props.exportTableColumns[e].type);
+        if(props.exportTableColumns[e]){
+     setSelectType(props.exportTableColumns[e].type);
+        }
         setColonItemCombobox(e);
       };
 
